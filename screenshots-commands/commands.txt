@@ -1,0 +1,145 @@
+wget https://dev.mysql.com/get/mysql-apt-config_0.8.22-1_all.deb
+sudo dpkg -i mysql-apt-config_0.8.22-1_all.deb
+
+CREATE TABLE Animal (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    type VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Pet (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    animal_id INT,
+    breed VARCHAR(50),
+    FOREIGN KEY (animal_id) REFERENCES Animal(id)
+);
+
+CREATE TABLE PackAnimal (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    animal_id INT,
+    load_capacity DECIMAL(5,2),
+    FOREIGN KEY (animal_id) REFERENCES Animal(id)
+);
+
+CREATE TABLE dogs (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    pet_id INT,
+    command VARCHAR(20),
+    FOREIGN KEY (pet_id) REFERENCES Pet(id)
+);
+
+CREATE TABLE cats (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    pet_id INT,
+    command VARCHAR(20),
+    FOREIGN KEY (pet_id) REFERENCES Pet(id)
+);
+
+CREATE TABLE hamsters (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    pet_id INT,
+    command VARCHAR(20),
+    FOREIGN KEY (pet_id) REFERENCES Pet(id)
+);
+
+CREATE TABLE horses (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    pack_animal_id INT,
+    command VARCHAR(20),
+    FOREIGN KEY (pack_animal_id) REFERENCES PackAnimal(id)
+);
+
+CREATE TABLE camels (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    pack_animal_id INT,
+    command VARCHAR(20),
+    FOREIGN KEY (pack_animal_id) REFERENCES PackAnimal(id)
+);
+
+CREATE TABLE donkeys (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    pack_animal_id INT,
+    command VARCHAR(20),
+    FOREIGN KEY (pack_animal_id) REFERENCES PackAnimal(id)
+);
+
+INSERT INTO dogs (name, command, birth_date) VALUES
+('Buddy', 'Sit', '2022-06-15'),
+('Max', 'Stay', '2021-11-25');
+
+INSERT INTO cats (name, command, birth_date) VALUES
+('Whiskers', 'Jump', '2021-09-10'),
+('Shadow', 'Run', '2020-12-20');
+
+INSERT INTO hamsters (name, command, birth_date) VALUES
+('Nibbles', 'Spin', '2022-03-01'),
+('Squeaky', 'Roll', '2021-07-19');
+
+INSERT INTO horses (name, command, birth_date) VALUES
+('Thunder', 'Run', '2018-04-25'),
+('Lightning', 'Jump', '2019-08-30');
+
+INSERT INTO camels (name, command, birth_date) VALUES
+('Desert', 'Carry', '2017-10-10'),
+('Sandy', 'Trek', '2018-05-15');
+
+INSERT INTO donkeys (name, command, birth_date) VALUES
+('Eeyore', 'Bray', '2019-01-01'),
+('Jack', 'Carry', '2018-11-25');
+
+DELETE FROM camels;
+
+CREATE TABLE horses_and_donkeys (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    command VARCHAR(20),
+    original_table ENUM('horses', 'donkeys')
+);
+
+INSERT INTO horses_and_donkeys (name, command, birth_date, original_table)
+SELECT name, command, birth_date, 'horses' FROM horses;
+
+INSERT INTO horses_and_donkeys (name, command, birth_date, original_table)
+SELECT name, command, birth_date, 'donkeys' FROM donkeys;
+
+DROP TABLE horses;
+DROP TABLE donkeys;
+
+CREATE TABLE young_animals (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    command VARCHAR(100),
+    birth_date DATE,
+    age_months INT
+);
+
+INSERT INTO young_animals (name, command, birth_date, age_months)
+SELECT name, command, birth_date,
+    TIMESTAMPDIFF(MONTH, birth_date, CURDATE()) AS age_months
+FROM horses_and_donkeys
+WHERE TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) BETWEEN 1 AND 3;
+
+CREATE TABLE all_animals (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    command VARCHAR(20),
+    birth_date DATE,
+    original_table ENUM('dogs', 'cats', 'hamsters', 'horses_and_donkeys')
+);
+
+INSERT INTO all_animals (name, command, birth_date, original_table)
+SELECT name, command, birth_date, 'dogs' FROM dogs;
+
+INSERT INTO all_animals (name, command, birth_date, original_table)
+SELECT name, command, birth_date, 'cats' FROM cats;
+
+INSERT INTO all_animals (name, command, birth_date, original_table)
+SELECT name, command, birth_date, 'hamsters' FROM hamsters;
+
+INSERT INTO all_animals (name, command, birth_date, original_table)
+SELECT name, command, birth_date, original_table FROM horses_and_donkeys;
+
+DROP TABLE dogs;
+DROP TABLE cats;
+DROP TABLE hamsters;
+DROP TABLE horses_and_donkeys;
