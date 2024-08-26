@@ -20,9 +20,16 @@ public class NurseryController {
         boolean work = true;
         while (work) {
             view.displayMenu();
-            view.showPrompt();
 
-            int option = Integer.parseInt(new Scanner(System.in).nextLine());
+            int option;
+            do {
+                view.showPrompt();
+                try {
+                    option = Integer.parseInt(new Scanner(System.in).nextLine());
+                } catch (NumberFormatException e) {
+                    option = 7;
+                }
+            } while (option > 5 || option < 1);
 
             switch (option) {
                 case 1:
@@ -37,6 +44,10 @@ public class NurseryController {
                 case 4:
                     displayAllAnimals();
                     break;
+                case 5:
+                    view.showMessage("Goodbye!");
+                    work = false;
+                    break;
             }
         }
     }
@@ -45,21 +56,21 @@ public class NurseryController {
         String type = getAnimalType();
         switch (type) {
             case "Pack":
-                System.out.print("Enter a name: ");
+                view.showMessage("Enter a name: ");
                 String packAnimalName = (new Scanner(System.in)).nextLine();
-                System.out.print("Enter an age: ");
+                view.showMessage("Enter an age: ");
                 int packAge = (new Scanner(System.in)).nextInt();
-                System.out.print("Enter a subclass: ");
+                view.showMessage("Enter a subclass: ");
                 String packClassName = (new Scanner(System.in)).nextLine();
 
                 model.addPack(new Pack(packAnimalName, packAge, packClassName));
                 break;
             case "Pet":
-                System.out.print("Enter a name: ");
+                view.showMessage("Enter a name: ");
                 String petAnimalName = (new Scanner(System.in)).nextLine();
-                System.out.print("Enter an age: ");
+                view.showMessage("Enter an age: ");
                 int petAge = (new Scanner(System.in)).nextInt();
-                System.out.print("Enter a subclass: ");
+                view.showMessage("Enter a subclass: ");
                 String petClassName = (new Scanner(System.in)).nextLine();
 
                 model.addPet(new Pet(petAnimalName, petAge, petClassName));
@@ -70,8 +81,12 @@ public class NurseryController {
     private String getAnimalType() {
         int option;
         do {
-            System.out.println("Choose a class: \n 1 - Pack \n 2 - Pet");
-            option = Integer.parseInt(new Scanner(System.in).nextLine());
+            view.showMessage("Choose a class: \n 1 - Pack \n 2 - Pet");
+            try {
+                option = Integer.parseInt(new Scanner(System.in).nextLine());
+            } catch (NumberFormatException e) {
+                option = 3;
+            }
         } while (option > 2 || option < 1);
         if (option == 1) {
             return "Pack";
@@ -93,13 +108,13 @@ public class NurseryController {
         } else if (type.equalsIgnoreCase("Pet")) {
             animalMap = model.getPetList();
         } else {
-            System.out.println("Invalid animal type");
+            view.showMessage("Invalid animal type");
         }
 
         if (model.animalExists(name, animalMap)) {
             view.displayAnimalCommands(name, model.getCommands(name).toArray(new String[0]));
         } else {
-            System.out.println("Animal does not exist");
+            view.showMessage("Animal does not exist");
         }
     }
 
@@ -112,8 +127,16 @@ public class NurseryController {
                 model.addCommand(name, command);
             }
         }
+        if (type.equalsIgnoreCase("Pet")) {
+            if (model.animalExists(name, model.getPetList())) {
+                String command = view.getCommand();
+                model.addCommand(name, command);
+            }
+        }
     }
+
     private void displayAllAnimals() {
         System.out.println(model.getAllAnimals());
     }
+
 }

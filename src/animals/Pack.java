@@ -2,8 +2,6 @@ package animals;
 
 import animals.interfaces.Ridable;
 
-import java.util.Objects;
-
 public class Pack implements Ridable, Animal {
 
     private int age;
@@ -29,6 +27,11 @@ public class Pack implements Ridable, Animal {
     @Override
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public int getAge() {
+        return age;
     }
 
     @Override

@@ -31,6 +31,12 @@ public class Pet implements Pettable, Animal {
     }
 
     @Override
+    public int getAge() {
+        return age;
+    }
+
+
+    @Override
     public String get_Class() {
         return this._class;
     }
@@ -42,10 +48,9 @@ public class Pet implements Pettable, Animal {
 
     @Override
     public String toString() {
-        return "Pet " +
+        return "\nPet " +
                 "name = '" + name + '\'' +
                 ", age = " + age +
-                ", type = '" + _class + '\'' +
-                '\n';
+                ", type = '" + _class + '\'';
     }
 }
