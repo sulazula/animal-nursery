@@ -4,7 +4,7 @@ import animals.Animal;
 import animals.Pack;
 import animals.Pet;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class NurseryController {
 
@@ -32,7 +32,11 @@ public class NurseryController {
                     checkAnimalCommands();
                     break;
                 case 3:
-
+                    teachAnimalCommands();
+                    break;
+                case 4:
+                    displayAllAnimals();
+                    break;
             }
         }
     }
@@ -41,21 +45,21 @@ public class NurseryController {
         String type = getAnimalType();
         switch (type) {
             case "Pack":
-                System.out.println("Enter a name: ");
+                System.out.print("Enter a name: ");
                 String packAnimalName = (new Scanner(System.in)).nextLine();
-                System.out.println("Enter an age: ");
+                System.out.print("Enter an age: ");
                 int packAge = (new Scanner(System.in)).nextInt();
-                System.out.println("Enter a subclass: ");
+                System.out.print("Enter a subclass: ");
                 String packClassName = (new Scanner(System.in)).nextLine();
 
                 model.addPack(new Pack(packAnimalName, packAge, packClassName));
                 break;
             case "Pet":
-                System.out.println("Enter a name: ");
+                System.out.print("Enter a name: ");
                 String petAnimalName = (new Scanner(System.in)).nextLine();
-                System.out.println("Enter an age: ");
+                System.out.print("Enter an age: ");
                 int petAge = (new Scanner(System.in)).nextInt();
-                System.out.println("Enter a subclass: ");
+                System.out.print("Enter a subclass: ");
                 String petClassName = (new Scanner(System.in)).nextLine();
 
                 model.addPet(new Pet(petAnimalName, petAge, petClassName));
@@ -68,34 +72,48 @@ public class NurseryController {
         do {
             System.out.println("Choose a class: \n 1 - Pack \n 2 - Pet");
             option = Integer.parseInt(new Scanner(System.in).nextLine());
-        } while (option != 1 && option != 2);
-            return option == 1 ? "Pack" : "Pet";
+        } while (option > 2 || option < 1);
+        if (option == 1) {
+            return "Pack";
+        }
+        if (option == 2) {
+            return "Pet";
+        }
+        return null;
     }
 
     private void checkAnimalCommands() {
         String type = getAnimalType();
         String name = view.getAnimalName();
+
+        Map<? extends Animal, Set<String>> animalMap = null;
+
         if (type.equalsIgnoreCase("Pack")) {
-            if (model.animalExists(name, model.getPackList())) {
-                view.displayAnimalCommands(name, model.getCommands(name).toArray(new String[0]) );
-            }
-        }
-        if (type.equalsIgnoreCase("Pet")) {
-            if (model.animalExists(name, model.getPetList())) {
-                view.displayAnimalCommands(name, model.getCommands(name).toArray(new String[0]) );
-            }
+            animalMap = model.getPackList();
+        } else if (type.equalsIgnoreCase("Pet")) {
+            animalMap = model.getPetList();
+        } else {
+            System.out.println("Invalid animal type");
         }
 
+        if (model.animalExists(name, animalMap)) {
+            view.displayAnimalCommands(name, model.getCommands(name).toArray(new String[0]));
+        } else {
+            System.out.println("Animal does not exist");
+        }
     }
+
     private void teachAnimalCommands() {
         String type = getAnimalType();
         String name = view.getAnimalName();
         if (type.equalsIgnoreCase("Pack")) {
             if (model.animalExists(name, model.getPackList())) {
-                System.out.print("Enter a new command: ");
                 String command = view.getCommand();
-                model.addCommand(n);
+                model.addCommand(name, command);
             }
         }
+    }
+    private void displayAllAnimals() {
+        System.out.println(model.getAllAnimals());
     }
 }

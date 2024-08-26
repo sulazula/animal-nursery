@@ -29,22 +29,56 @@ public class NurseryModel {
     }
 
     public boolean animalExists(String name, Map<? extends Animal, Set<String>> animalList) {
-        return animalList.containsKey(name);
+        for (Animal animal : animalList.keySet()) {
+            if (animal.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        };
+        return false;
     }
 
-    public void addCommand(String name, String packList) {
-        if (packList.contains(name)) {
-            packList.
+    public void addCommand(String name, String command) {
+        Animal animal = getAnimalByName(name);
+        if (animal != null) {
+            if (animal instanceof Pack) {
+                packList.get(animal).add(command);
+            } else if (animal instanceof Pet) {
+                petList.get(animal).add(command);
+            }
+        } else {
+            System.out.println("Animal not found");
         }
+    }
+
+    private Animal getAnimalByName(String name) {
+        // Поиск в списке Pack
+        for (Pack pack : packList.keySet()) {
+            if (pack.getName().equals(name)) {
+                return pack;
+            }
+        }
+
+        // Поиск в списке Pet
+        for (Pet pet : petList.keySet()) {
+            if (pet.getName().equals(name)) {
+                return pet;
+            }
+        }
+
+        return null;
     }
 
     public Set<String> getCommands(String name) {
-        if (packList.containsKey(name)) {
-            return packList.get(name);
-        } else if (petList.containsKey(name)) {
-            return petList.get(name);
+        Animal animal = getAnimalByName(name);
+
+        if (animal != null) {
+            if (animal instanceof Pack) {
+                return packList.get(animal);
+            } else if (animal instanceof Pet) {
+                return petList.get(animal);
+            }
         }
-        return Collections.emptySet();
+        return new HashSet<>();
     }
     public List<String> getAllAnimals() {
         List<String> animals = new ArrayList<>();

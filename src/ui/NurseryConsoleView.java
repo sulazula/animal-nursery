@@ -22,7 +22,7 @@ public class NurseryConsoleView implements NurseryView {
 
     @Override
     public String getCommand() {
-        System.out.println("Enter command: ");
+        System.out.print("Enter a command you want to teach for: ");
         return scanner.nextLine();
     }
 
@@ -33,8 +33,6 @@ public class NurseryConsoleView implements NurseryView {
             System.out.println(" - " + command);
         }
     }
-
-
 
     @Override
     public void displayMenu() {
@@ -48,6 +46,6 @@ public class NurseryConsoleView implements NurseryView {
 
     @Override
     public void showPrompt() {
-        System.out.println("Please enter a command: ");
+        System.out.print("Please enter a command: ");
     }
 }

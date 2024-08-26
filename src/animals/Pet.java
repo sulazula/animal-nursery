@@ -46,6 +46,6 @@ public class Pet implements Pettable, Animal {
                 "name = '" + name + '\'' +
                 ", age = " + age +
                 ", type = '" + _class + '\'' +
-                '}';
+                '\n';
     }
 }

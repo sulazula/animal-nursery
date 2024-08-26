@@ -43,10 +43,9 @@ public class Pack implements Ridable, Animal {
 
     @Override
     public String toString() {
-        return "Pack " +
+        return "\nPack " +
                 "name = '" + name + '\'' +
                 ", age = " + age +
-                ", type = '" + _class + '\'' +
-                '}';
+                ", type = '" + _class + '\'';
     }
 }
