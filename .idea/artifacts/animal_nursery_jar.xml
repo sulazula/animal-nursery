@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="animal-nursery:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/animal_nursery_jar</output-path>
+    <root id="archive" name="animal-nursery.jar">
+      <element id="module-output" name="animal-nursery" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/gson-2.11.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

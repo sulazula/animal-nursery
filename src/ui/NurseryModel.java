@@ -12,7 +12,7 @@ import java.util.*;
 
 public class NurseryModel {
 
-    private static final String LOG_PATH = "src/data/db.json";
+    private static final String LOG_PATH = "app/src/data/db.json";
     private Map<Pack, Set<String>> packList;
     private Map<Pet, Set<String>> petList;
     private Gson gson = new Gson();
@@ -116,49 +116,42 @@ public class NurseryModel {
 
     private void loadAnimalsFromJson() {
         try (FileReader reader = new FileReader(LOG_PATH)) {
-            // Чтение всех данных как один JSON объект
             Type combinedDataType = new TypeToken<Map<String, Object>>() {}.getType();
             Map<String, Object> combinedData = gson.fromJson(reader, combinedDataType);
 
-            // Обработка данных о животных
             Map<String, Map<String, Object>> animalData = (Map<String, Map<String, Object>>) combinedData.get("animals");
             if (animalData != null) {
-                // Обработка данных для Pack
                 if (animalData.containsKey("Pack")) {
                     Map<String, Object> packData = animalData.get("Pack");
                     for (Map.Entry<String, Object> entry : packData.entrySet()) {
                         String name = entry.getKey();
                         Map<String, Object> attributes = (Map<String, Object>) entry.getValue();
                         int age = ((Number) attributes.get("age")).intValue();
-                        String subclass = (String) attributes.get("subclass"); // Получение subclass
+                        String subclass = (String) attributes.get("subclass");
 
                         Pack pack = new Pack(name, age, subclass);
-                        packList.put(pack, new HashSet<>()); // Изначально пусто
+                        packList.put(pack, new HashSet<>());
                     }
                 }
 
-                // Обработка данных для Pet
                 if (animalData.containsKey("Pet")) {
                     Map<String, Object> petData = animalData.get("Pet");
                     for (Map.Entry<String, Object> entry : petData.entrySet()) {
                         String name = entry.getKey();
                         Map<String, Object> attributes = (Map<String, Object>) entry.getValue();
                         int age = ((Number) attributes.get("age")).intValue();
-                        String subclass = (String) attributes.get("subclass"); // Получение subclass
+                        String subclass = (String) attributes.get("subclass");
 
                         Pet pet = new Pet(name, age, subclass);
-                        petList.put(pet, new HashSet<>()); // Изначально пусто
+                        petList.put(pet, new HashSet<>());
                     }
                 }
             }
 
-            // Обработка команд
             Map<String, Object> commandsData = (Map<String, Object>) combinedData.get("commands");
             if (commandsData != null) {
-                // Восстановление команд для Pack и Pet
                 for (Map.Entry<String, Object> entry : commandsData.entrySet()) {
                     String name = entry.getKey();
-                    // Преобразование списка команд в Set
                     List<String> commandList = (List<String>) entry.getValue();
                     Set<String> commands = new HashSet<>(commandList);
 
@@ -173,7 +166,6 @@ public class NurseryModel {
                 }
             }
         } catch (IOException e) {
-            // Если файл не существует или не удается прочитать, возвращаем пустые списки
             packList = new HashMap<>();
             petList = new HashMap<>();
         }
