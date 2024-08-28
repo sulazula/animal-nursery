@@ -23,6 +23,14 @@ The Animal Nursery application provides functionalities to manage animals in a n
 
 To get started with the Animal Nursery project, you need to set up the project and ensure you have the necessary dependencies. This project uses the Gson library for JSON handling.
 
+## Start with Docker 🐳
+
+To get started with docker copy the code below in terminal
+```shell
+ docker pull sulazula/animal-nursery
+```
+Or visit [DockerHub](https://hub.docker.com/r/sulazula/animal-nursery) page
+
 ### Dependencies 🔧
 
 The project relies on the Gson library for parsing and generating JSON. You can find Gson here:
