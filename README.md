@@ -27,7 +27,12 @@ To get started with the Animal Nursery project, you need to set up the project a
 
 To get started with docker copy the code below in terminal
 ```shell
- docker pull sulazula/animal-nursery
+ sudo docker pull sulazula/animal-nursery: && \
+ sudo docker run -it sulazula/animal-nursery:latest nursery-container
+```
+CMD for docker: 
+```shell
+ java -jar animal-nursery.jar
 ```
 Or visit [DockerHub](https://hub.docker.com/r/sulazula/animal-nursery) page
 
